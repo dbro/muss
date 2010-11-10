@@ -18,9 +18,9 @@ artists/songs/albums/tracks.
 
 What kind of people would use muss? People who ...
 
-* often know what music they want to hear
-* appreciate the ability to browse sometimes
-* typically have easy access to a command line
+* can often name the music they want to hear
+* also want an option to browse their collection
+* have easy access to a command line
 * seek to minimize music player overhead (time, memory, cpu, etc)
 * do not care about flashy displays of album art, lyrics, ratings
 * do not want to learn yet another quirky graphical interface, even
