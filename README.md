@@ -61,8 +61,8 @@ Requirements
   at least find them by artist or album name.
 * dmenu patched to support xmms-style pattern matching (-xs),
   and filtermode (-f) to provide multiple items in the result
-  Note these patches are available in the [dmenu-patches]
-  (http://github.com/dbro/dmenu-patches) repository.
+  Note these patches are available in the
+  [dmenu-patches](http://github.com/dbro/dmenu-patches) repository.
 
 To Do
 -----
