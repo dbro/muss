@@ -71,29 +71,30 @@ To Do
 -----
 * remove xft requirement
 * add help/usage message
+* add options to start, stop, pause toggle, next, back, list, quiet, append
 
 Thank you
 ---------
 The primary inspiration for a simple command-line approach came from
 [plait](http://stephenjungels.com/jungels.net/projects/plait/) which
-showed the convenience a partial-text search. It has some additional
-features not found in muss (support for multiple players, shoutcast
-stream searching).
+showed the convenience of partial-text search. plait has some
+features not found in muss (eg. support for multiple player backends, 
+shoutcast stream searching).
 
 After using plait for a while, I sometimes missed the ability to
-scan and browse for music that I had forgotten. But browsing seemed
-to be too slow -- the emphasis on sorting and browsing is what makes
-those graphical music programs so cumbersome. Eventually I saw the
-excellent browsing speed and simplicity demonstrated by the program
-launcher based on [dmenu](http://tools.suckless.org/dmenu/) included
+scan and browse for music that I had forgotten. But I did not want to
+have a cumbersome graphical browser as found in graphical music management
+programs, so I did not pursue it. Then later I saw the excellent 
+text browsing experience demonstrated by the very fast and simple program
+launcher built with [dmenu](http://tools.suckless.org/dmenu/) included
 with many text-centric linux distributions.
 
 muss is an attempt to combine the best of both modes, search and browse.
 The name can be thought of as an abbreviation of "music search". It is
 also an idiom heard in TV commercials to imply a messy hassle ("no fuss!
 no muss!") which is what the over-complicated music players can be. Lastly,
-also a German word that translates to English as "must", which appeals
-to the idea that the computer should be responding to commands from 
-people, and not the other way around.
+it is also a German word that translates to English as "must", which 
+appeals to the idea that the computer should be responding to commands
+from people, and not wasting their time with a difficult interface.
 
 Dan Brown, 2010
