@@ -17,6 +17,7 @@ Its goal is to minimize time spent browsing through lists of
 artists/songs/albums/tracks.
 
 What kind of people would use muss?
+
 * often know what music they want to hear
 * appreciate the ability to browse sometimes
 * typically have easy access to a command line
