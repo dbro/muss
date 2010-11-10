@@ -14,6 +14,14 @@
 DEBUG=0
 PLMARKER="__playlist__ " 
 
+if [ -f $HOME/.dmenurc ]
+then
+  . $HOME/.dmenurc
+else
+  DMENU='dmenu'
+fi
+DMENU="$DMENU -i -l 10 -f -xs"
+
 PLAYLISTS=`mpc lsplaylists | sed -e "s/.*/$PLMARKER&/"`
 [ $DEBUG -gt 1 ] && echo "playlists: $PLAYLISTS"
 FILES=`mpc listall`
@@ -33,8 +41,7 @@ then
   ALLMATCHES=`eval "echo \"$FILES\\n$PLAYLISTS\" $CRITERIA"`
 else
   # interactive browse/search mode
-  ALLMATCHES=`echo "$FILES\\n$PLAYLISTS" | \
-    dmenu -fa "Inconsolata-14" -l 10 -i -xs -f`
+  ALLMATCHES=`echo "$FILES\\n$PLAYLISTS" | $DMENU`
 fi
 
 [ $DEBUG -gt 1 ] && echo "all matches = $ALLMATCHES ."

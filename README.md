@@ -13,7 +13,7 @@ Do you find yourself spending too much time clicking, scrolling,
 dragging, dropping just to hear your favorite slow-jam?
 
 muss is a simple and very fast command line tool to play music.
-Its goal is to minimize time spent browsing through lists of
+Its goal is to minimize time spent browsing lists of
 artists/songs/albums/tracks.
 
 What kind of people would use muss? People who ...
@@ -60,16 +60,12 @@ Requirements
   folders like "/Beatles/Abbey Road/track01.mp3" then you can
   at least find them by artist or album name.
 * dmenu patched to support xmms-style pattern matching (-xs),
-  filtermode (-f) to support multiple items in the result,
-  xft fonts (-fa) (the xft requirement will be removed later)
+  and filtermode (-f) to provide multiple items in the result
   Note these patches are available here:
   http://github.com/dbro/dmenu-patches
-* xft Inconsolata font (the xft requirement will be removed later)
-  http://www.levien.com/type/myfonts/inconsolata.html
 
 To Do
 -----
-* remove xft requirement
 * add help/usage message
 * add options to start, stop, pause toggle, next, back, list, quiet, append
 
