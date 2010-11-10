@@ -45,7 +45,8 @@ Quicksearch mode examples:
     muss rolling stones
     muss roll sto
     muss guns roses not heaven
-    muss playlist my_faves
+    muss playlist summer 2004
+    muss publicradio
 
 Interactive mode:
     muss
