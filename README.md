@@ -1,7 +1,7 @@
 muss
 ====
 
-The no-fuss, no-muss way to play music from the command line
+The fast and simple way to play music from the command line
 
 Introduction
 ------------
