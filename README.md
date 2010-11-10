@@ -16,7 +16,7 @@ muss is a simple and very fast command line tool to play music.
 Its goal is to minimize time spent browsing through lists of
 artists/songs/albums/tracks.
 
-What kind of people would use muss?
+What kind of people would use muss? People who ...
 
 * often know what music they want to hear
 * appreciate the ability to browse sometimes
