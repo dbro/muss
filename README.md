@@ -51,24 +51,24 @@ Quicksearch mode examples:
 Interactive mode:
     muss
 
+In addition to the core commands which create a playlist, muss has
+basic operations for controlling playback (eg. pause, randomize, list).
+
 Requirements
 ------------
 * mpc, mpd
 * sed, grep
 * filenames and directory names should be useful.
-  If you have a lot of files named "track01.mp3", they probably
-  wont be matched as individual songs. If you put them in well-named
-  folders like "/Beatles/Abbey Road/track01.mp3" then you can
-  at least find them by artist or album name.
+  If you have a lot of files with generic names like "track01.mp3", you
+  will not be able to match them as individual songs. If they are in
+  well-named folders like "/Beatles/Abbey Road/track01.mp3" then you can
+  at least match by the artist or album. For help finding and
+  fixing music file names, try [EasyTAG](http://easytag.sourceforge.net/)
+  and [picard](http://musicbrainz.org/doc/PicardTagger).
 * dmenu patched to support xmms-style pattern matching (-xs),
   and filtermode (-f) to provide multiple items in the result
   Note these patches are available in the
   [dmenu-patches](http://github.com/dbro/dmenu-patches) repository.
-
-To Do
------
-* add help/usage message
-* add options to start, stop, pause toggle, next, back, list, quiet, append
 
 Thank you
 ---------
@@ -92,6 +92,6 @@ also an idiom heard in TV commercials to imply a messy hassle ("no fuss!
 no muss!") which is what the over-complicated music players can be. Lastly,
 it is also a German word that translates to English as "must", which 
 appeals to the idea that the computer should be responding to commands
-from people, and not wasting their time with a difficult interface.
+from people, and not asking people to waste time with a difficult interface.
 
 Dan Brown, 2010
