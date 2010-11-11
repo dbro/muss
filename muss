@@ -24,10 +24,27 @@ options:
  -s stop current playlist (don't browse)
  -n next song in current playlist (don't browse)
  -b back to previous song in current playlist (don't browse)
+ -u update music database (don't browse)
 "
 
 DEBUG=0
 PLMARKER="__playlist__ " 
+
+print_debug() {
+  # requires 2 arguments: MIN_LEVEL, VARIABLE_NAME
+  # NOTE: the \$$ ref/deref requires #!/bin/bash, not #!/bin/sh
+  if [ $DEBUG -ge $1 ] 
+  then
+    echo -n "$2: "; eval echo -n \$$2; echo " ."
+  fi
+}
+
+PROG_ARGS=" $* "
+option_check() {
+  # look to see if the user included the option flag in the command
+  # requires one argument, the flag. eg "-a"
+  echo "$PROG_ARGS" | grep -i -E " $1 " > /dev/null
+}
 
 # print help message and usage, then exit
 echo " $* " | grep -i -E '[ \t]\-{1,2}(help|h|\?)[ \t]' > /dev/null && \
@@ -43,20 +60,20 @@ DMENU="$DMENU -i -l 10 -f -xs"
 
 # parse arguments for recognized options
 # all non-help (non-early-termination) arguments should be listed below
-IGNOREARGS='-a -q -r -l -p -s -n -b'
-NOBROWSEARGS='-l -p -s -n -b'
+IGNOREARGS='-a -q -r -l -p -s -n -b -u'
+NOBROWSEARGS='-l -p -s -n -b -u'
 IGNOREFILTER=" "`echo "$IGNOREARGS" | sed -e 's/ -/ \\\\| -/g'`" "
 NOBROWSEFILTER=" "`echo "$NOBROWSEARGS" | sed -e 's/ -/ \\\\| -/g'`" "
 SEARCHTERMS=`echo " $* " | sed \
   -e 's/ /  /g' \
   -e "s/$IGNOREFILTER/ /Ig"`
-[ $DEBUG -gt 1 ] && echo "search terms: $SEARCHTERMS ."
+print_debug 1 SEARCHTERMS
 
 collect_items() {
   PLAYLISTS=`mpc lsplaylists | sed -e "s/.*/$PLMARKER&/"`
-  [ $DEBUG -gt 1 ] && echo "playlists: $PLAYLISTS"
+  print_debug 2 PLAYLISTS
   FILES=`mpc listall`
-  [ $DEBUG -gt 1 ] && echo "files (head):" `echo "$FILES" | head`
+  print_debug 2 FILES
 }
 
 if [ `echo $SEARCHTERMS | wc -w` -gt 0 ]
@@ -70,7 +87,7 @@ then
     -e 's/\S*/| grep -i \"&\"/g' \
     -e 's/\"__-v__/-v \"/g' \
     -e 's/ \"-/ \"\\\\-/g'`
-  [ $DEBUG -gt 1 ] && echo "criteria = $CRITERIA"
+  print_debug 2 CRITERIA
   collect_items
   ALLMATCHES=`eval "echo \"$FILES\\n$PLAYLISTS\" $CRITERIA"`
 elif [ `echo " $* " | grep -i "$NOBROWSEFILTER" | wc -l` -gt 0  ]
@@ -83,56 +100,32 @@ else
   collect_items
   ALLMATCHES=`echo "$FILES\\n$PLAYLISTS" | $DMENU`
 fi
-
-[ $DEBUG -gt 1 ] && echo "all matches: $ALLMATCHES ."
+print_debug 2 ALLMATCHES
 
 LOADCOMMANDS=`echo "$ALLMATCHES" | sed \
   -e '/^$/d' \
   -e 's/.*/mpc add \"&\" > \/dev\/null;/g' \
   -e "s/mpc add \"$PLMARKER/mpc load \"/g"`
-[ $DEBUG -gt 0 ] && echo "load commands: $LOADCOMMANDS ."
+print_debug 1 LOADCOMMANDS
 
 # check to see if we found some music to load
 if [ `echo "$LOADCOMMANDS" | wc -c` -ge 5 ]
 then
-  # clear playlist unless in append mode
-  echo " $* " | grep -i -E ' -a ' > /dev/null
-  [ $? -eq 0 ] || mpc clear > /dev/null
-
+  # check for append mode
+  option_check -a || mpc clear > /dev/null
   eval "$LOADCOMMANDS > /dev/null"
-
-  # randomize playlist
-  # note this should be done before autoplay happens
-  echo " $* " | grep -i -E ' -r ' > /dev/null
-  [ $? -eq 0 ] && mpc shuffle > /dev/null
-
-  # start autoplay unless we've been asked to stay quiet
-  echo " $* " | grep -i -E ' -q ' > /dev/null
-  [ $? -eq 0 ] || mpc play > /dev/null
+  # we need to randomize before autoplay begins
+  option_check -r && mpc shuffle > /dev/null
+  # start autoplay
+  option_check -q || mpc play > /dev/null
 fi
 
-# randomize playlist
-# TODO: come up with a new approach that doesn't do this twice
-echo " $* " | grep -i -E ' -r ' > /dev/null
-[ $? -eq 0 ] && mpc shuffle > /dev/null
-
-# advance to next item in playlist
-echo " $* " | grep -i -E ' -n ' > /dev/null
-[ $? -eq 0 ] && mpc next > /dev/null
-
-# back to previous item in playlist
-echo " $* " | grep -i -E ' -b ' > /dev/null
-[ $? -eq 0 ] && mpc prev > /dev/null
-
-# toggle play/pause
-echo " $* " | grep -i -E ' -p ' > /dev/null
-[ $? -eq 0 ] && mpc toggle > /dev/null
-
-# stop playing
-echo " $* " | grep -i -E ' -s ' > /dev/null
-[ $? -eq 0 ] && mpc stop > /dev/null
-
-# list playlist
-echo " $* " | grep -i -E ' -l ' > /dev/null
-[ $? -eq 0 ] && mpc playlist
+# note: we may randomize twice. oh well
+option_check -r && mpc shuffle > /dev/null
+option_check -n && mpc next > /dev/null
+option_check -b && mpc prev > /dev/null
+option_check -p && mpc toggle > /dev/null
+option_check -s && mpc stop > /dev/null
+option_check -l && mpc playlist
+option_check -u && mpc update > /dev/null
 
