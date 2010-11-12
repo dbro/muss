@@ -27,7 +27,6 @@ options:
  -u update music database (don't browse)
 "
 
-DEBUG=0
 PLMARKER="__playlist__ " 
 
 PROG_ARGS=" $* "
@@ -78,9 +77,8 @@ fi
 
 # remove pre-existing items if we added items and aren't in append mode
 ADD_COUNT=$(( `mpc playlist | wc -l` - $PRE_EXISTING_PLAYLIST_COUNT ))
-! option_check -a && [ "$ADD_COUNT" -gt 0 ] &&  
-  [ "$PRE_EXISTING_PLAYLIST_COUNT" -gt 0 ] && \
-    mpc del "1-$PRE_EXISTING_PLAYLIST_COUNT"
+! option_check -a && [ "$ADD_COUNT" -gt 0 ] && [ "$PRE_EXISTING_PLAYLIST_COUNT" -gt 0 ] && \
+  mpc del "1-$PRE_EXISTING_PLAYLIST_COUNT"
 
 # we need to randomize before autoplay begins
 option_check -r && mpc shuffle > /dev/null
