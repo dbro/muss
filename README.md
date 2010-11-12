@@ -70,6 +70,11 @@ Requirements
   Note these patches are available in the
   [dmenu-patches](http://github.com/dbro/dmenu-patches) repository.
 
+To Do
+-----
+* add command to save current playlist as a permanent mpd playlist (requires
+  mpc v.0.15.0 or newer)
+
 Thank you
 ---------
 The primary inspiration for a simple command-line approach came from
@@ -95,3 +100,5 @@ appeals to the idea that the computer should be responding to commands
 from people, and not asking people to waste time with a difficult interface.
 
 Dan Brown, 2010
+[project home page](http://github.com/dbro/muss)
+
