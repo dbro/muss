@@ -30,15 +30,6 @@ options:
 DEBUG=0
 PLMARKER="__playlist__ " 
 
-print_debug() {
-  # requires 2 arguments: MIN_LEVEL, VARIABLE_NAME
-  # NOTE: the \$$ ref/deref requires #!/bin/bash, not #!/bin/sh
-  if [ $DEBUG -ge $1 ] 
-  then
-    echo -n "$2: "; eval echo -n \$$2; echo " ."
-  fi
-}
-
 PROG_ARGS=" $* "
 option_check() {
   # look to see if the user included the option flag in the command
@@ -47,7 +38,7 @@ option_check() {
 }
 
 # print help message and usage, then exit
-echo " $* " | grep -i -E '[ \t]\-{1,2}(help|h|\?)[ \t]' > /dev/null && \
+echo "$PROG_ARGS" | grep -i -E '[ \t]\-{1,2}(help|h|\?)[ \t]' > /dev/null && \
   echo "$HELP_MESSAGE" && exit
 
 # remember the number of pre-existing playlist items for later removal
@@ -59,46 +50,37 @@ IGNOREARGS='-a -q -r -l -p -s -n -b -u'
 NOBROWSEARGS='-l -p -s -n -b -u'
 IGNOREFILTER=" "`echo "$IGNOREARGS" | sed -e 's/ -/ \\\\| -/g'`" "
 NOBROWSEFILTER=" "`echo "$NOBROWSEARGS" | sed -e 's/ -/ \\\\| -/g'`" "
-SEARCHTERMS=`echo " $* " | sed \
+SEARCHTERMS=`echo "$PROG_ARGS" | sed \
   -e 's/ /  /g' \
   -e "s/$IGNOREFILTER/ /Ig"`
-print_debug 1 SEARCHTERMS
 
 if [ `echo $SEARCHTERMS | wc -w` -gt 0 ]
 then
   # quicksearch mode
-  # use the command line parameters as search terms
   # matching is done by (full) filepath
-  # supports the "not" keyword to exclude patterns
   CRITERIA=`echo $SEARCHTERMS | sed \
     -e 's/not \(\S\)/__-v__\1/Ig' \
     -e 's/\S*/| grep -i \"&\"/g' \
     -e 's/\"__-v__/-v \"/g' \
     -e 's/ \"-/ \"\\\\-/g'`
-  print_debug 2 CRITERIA
   eval "mpc listall $CRITERIA" | mpc add > /dev/null
   eval "mpc lsplaylists $CRITERIA" | mpc load > /dev/null
-elif [ `echo " $* " | grep -i -v "$NOBROWSEFILTER" | wc -l` -gt 0  ]
+elif [ `echo "$PROG_ARGS" | grep -i -v "$NOBROWSEFILTER" | wc -l` -gt 0  ]
 then
   # interactive browse/search mode
   [ -f $HOME/.dmenurc ] && . $HOME/.dmenurc || DMENU='dmenu'
   DMENU="$DMENU -i -l 10 -f -xs"
   PLAYLISTS_AND_FILES=`mpc lsplaylists | sed -e "s/.*/$PLMARKER&/"`"\\n"`mpc listall`
-  print_debug 2 PLAYLISTS_AND_FILES
   ALLMATCHES=`echo "$PLAYLISTS_AND_FILES" | $DMENU`
-  print_debug 2 ALLMATCHES
   echo "$ALLMATCHES" | grep -v "$PLMARKER" | mpc add > /dev/null
   echo "$ALLMATCHES" | sed -n -e "s/$PLMARKER//p" | mpc load > /dev/null
 fi
 
 # remove pre-existing items if we added items and aren't in append mode
-#if [ "$ITEMS_ADDED" -gt 0 ] && ! option_check -a
 ADD_COUNT=$(( `mpc playlist | wc -l` - $PRE_EXISTING_PLAYLIST_COUNT ))
-if ! option_check -a && [ "$ADD_COUNT" -gt 0 ]
-then 
+! option_check -a && [ "$ADD_COUNT" -gt 0 ] &&  
   [ "$PRE_EXISTING_PLAYLIST_COUNT" -gt 0 ] && \
     mpc del "1-$PRE_EXISTING_PLAYLIST_COUNT"
-fi
 
 # we need to randomize before autoplay begins
 option_check -r && mpc shuffle > /dev/null
