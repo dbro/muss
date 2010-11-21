@@ -3,7 +3,7 @@
 # Dan Brown, 2010
 # 
 # note: interactive mode depends on dmenu with
-#       patches for xmms style multiple search
+#       patches for token style multiple search
 #       and filtermode multiple output.
 
 HELP_MESSAGE="muss version 0.1
@@ -68,7 +68,7 @@ elif [ `echo "$PROG_ARGS" | grep -i -v "$NOBROWSEFILTER" | wc -l` -gt 0  ]
 then
   # interactive browse/search mode
   [ -f $HOME/.dmenurc ] && . $HOME/.dmenurc || DMENU='dmenu'
-  DMENU="$DMENU -i -l 10 -f -xs"
+  DMENU="$DMENU -i -l 10 -f -t"
   PLAYLISTS_AND_FILES=`mpc lsplaylists | sed -e "s/.*/$PLMARKER&/"`"\\n"`mpc listall`
   ALLMATCHES=`echo "$PLAYLISTS_AND_FILES" | $DMENU`
   echo "$ALLMATCHES" | grep -v "$PLMARKER" | mpc add > /dev/null
