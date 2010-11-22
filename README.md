@@ -65,10 +65,10 @@ Requirements
   at least match by the artist or album. For help finding and
   fixing music file names, try [EasyTAG](http://easytag.sourceforge.net/)
   and [picard](http://musicbrainz.org/doc/PicardTagger).
-* dmenu patched to support xmms-style pattern matching (-xs),
+* dmenu patched to support token style multiple pattern matching (-t),
   and filtermode (-f) to provide multiple items in the result
-  Note these patches are available in the
-  [dmenu-patches](http://github.com/dbro/dmenu-patches) repository.
+  Note that a version of dmenu with these patches applied is available in
+  the [dmenu-db](http://github.com/dbro/dmenu-db) repository.
 
 To Do
 -----
