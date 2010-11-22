@@ -71,8 +71,10 @@ then
   DMENU="$DMENU -i -l 10 -f -t"
   PLAYLISTS_AND_FILES=`mpc lsplaylists | sed -e "s/.*/$PLMARKER&/"`"\\n"`mpc listall`
   ALLMATCHES=`echo "$PLAYLISTS_AND_FILES" | $DMENU`
-  echo "$ALLMATCHES" | grep -v "$PLMARKER" | mpc add > /dev/null
-  echo "$ALLMATCHES" | sed -n -e "s/$PLMARKER//p" | mpc load > /dev/null
+  FILEMATCHES=`echo "$ALLMATCHES" | grep -v "$PLMARKER"`
+  [ `echo "$FILEMATCHES" | wc -w` -gt 0 ] && echo "$FILEMATCHES" | mpc add > /dev/null
+  PLMATCHES=`echo "$ALLMATCHES" | sed -n -e "s/$PLMARKER//p"`
+  [ `echo "$PLMATCHES" | wc -w` -gt 0 ] && echo "$PLMATCHES" | mpc load > /dev/null
 fi
 
 # remove pre-existing items if we added items and aren't in append mode
