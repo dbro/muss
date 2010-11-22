@@ -64,7 +64,7 @@ then
     -e 's/ \"-/ \"\\\\-/g'`
   eval "mpc listall $CRITERIA" | mpc add > /dev/null
   eval "mpc lsplaylists $CRITERIA" | mpc load > /dev/null
-elif [ `echo "$PROG_ARGS" | grep -i -v "$NOBROWSEFILTER" | wc -l` -gt 0  ]
+elif echo "$PROG_ARGS" | grep -i -v "$NOBROWSEFILTER" > /dev/null
 then
   # interactive browse/search mode
   [ -f $HOME/.dmenurc ] && . $HOME/.dmenurc || DMENU='dmenu'
