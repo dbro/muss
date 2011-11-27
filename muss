@@ -6,6 +6,10 @@
 #       patches for token style multiple search
 #       and filtermode multiple output.
 
+# modify / add your mpc options here.
+# read man mpc
+MPC="mpc -h localhost -p 6600"
+
 HELP_MESSAGE="muss version 0.1
 usage:   \"muss [options] [[not] <keyword>]...\" 
 example: \"muss elvis\"
@@ -41,7 +45,7 @@ echo "$PROG_ARGS" | grep -i -E '[ \t]\-{1,2}(help|h|\?)[ \t]' > /dev/null && \
   echo "$HELP_MESSAGE" && exit
 
 # remember the number of pre-existing playlist items for later removal
-PRE_EXISTING_PLAYLIST_COUNT=`mpc playlist | wc -l`
+PRE_EXISTING_PLAYLIST_COUNT=`$MPC playlist | wc -l`
 
 # parse arguments for recognized options
 # all non-help (non-early-termination) arguments should be listed below
@@ -62,33 +66,33 @@ then
     -e 's/\S*/| grep -i \"&\"/g' \
     -e 's/\"__-v__/-v \"/g' \
     -e 's/ \"-/ \"\\\\-/g'`
-  eval "mpc listall $CRITERIA" | mpc add > /dev/null
-  eval "mpc lsplaylists $CRITERIA" | mpc load > /dev/null
+  eval "$MPC listall $CRITERIA" | $MPC add > /dev/null
+  eval "$MPC lsplaylists $CRITERIA" | $MPC load > /dev/null
 elif echo "$PROG_ARGS" | grep -i -v "$NOBROWSEFILTER" > /dev/null
 then
   # interactive browse/search mode
   [ -f $HOME/.dmenurc ] && . $HOME/.dmenurc || DMENU='dmenu'
   DMENU="$DMENU -i -l 10 -f -t"
-  PLAYLISTS_AND_FILES=`mpc lsplaylists | sed -e "s/.*/$PLMARKER&/"`"\\n"`mpc listall`
+  PLAYLISTS_AND_FILES=`$MPC lsplaylists | sed -e "s/.*/$PLMARKER&/"`"\\n"`$MPC listall`
   ALLMATCHES=`echo "$PLAYLISTS_AND_FILES" | $DMENU`
   FILEMATCHES=`echo "$ALLMATCHES" | grep -v "$PLMARKER"`
-  [ `echo "$FILEMATCHES" | wc -w` -gt 0 ] && echo "$FILEMATCHES" | mpc add > /dev/null
+  [ `echo "$FILEMATCHES" | wc -w` -gt 0 ] && echo "$FILEMATCHES" | $MPC add > /dev/null
   PLMATCHES=`echo "$ALLMATCHES" | sed -n -e "s/$PLMARKER//p"`
-  [ `echo "$PLMATCHES" | wc -w` -gt 0 ] && echo "$PLMATCHES" | mpc load > /dev/null
+  [ `echo "$PLMATCHES" | wc -w` -gt 0 ] && echo "$PLMATCHES" | $MPC load > /dev/null
 fi
 
 # remove pre-existing items if we added items and aren't in append mode
-ADD_COUNT=$(( `mpc playlist | wc -l` - $PRE_EXISTING_PLAYLIST_COUNT ))
+ADD_COUNT=$(( `$MPC playlist | wc -l` - $PRE_EXISTING_PLAYLIST_COUNT ))
 ! option_check -a && [ "$ADD_COUNT" -gt 0 ] && [ "$PRE_EXISTING_PLAYLIST_COUNT" -gt 0 ] && \
-  mpc del "1-$PRE_EXISTING_PLAYLIST_COUNT"
+  $MPC del "1-$PRE_EXISTING_PLAYLIST_COUNT"
 
 # we need to randomize before autoplay begins
-option_check -r && mpc shuffle > /dev/null
-option_check -n && mpc next > /dev/null
-option_check -b && mpc prev > /dev/null
-! option_check -q && [ "$ADD_COUNT" -gt 0 ] && mpc play > /dev/null
-option_check -p && mpc toggle > /dev/null
-option_check -s && mpc stop > /dev/null
-option_check -l && mpc playlist
-option_check -u && mpc update > /dev/null
+option_check -r && $MPC shuffle > /dev/null
+option_check -n && $MPC next > /dev/null
+option_check -b && $MPC prev > /dev/null
+! option_check -q && [ "$ADD_COUNT" -gt 0 ] && $MPC play > /dev/null
+option_check -p && $MPC toggle > /dev/null
+option_check -s && $MPC stop > /dev/null
+option_check -l && $MPC playlist
+option_check -u && $MPC update > /dev/null
 
