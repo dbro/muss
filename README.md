@@ -20,6 +20,7 @@ What kind of people would use muss? People who ...
 
 * can often name the music they want to hear
 * also want an option to browse their collection
+* and a way to listen to last.fm stations
 * have easy access to a command line
 * seek to minimize music player overhead (time, memory, cpu, etc)
 * do not care about flashy displays of album art, lyrics, ratings
@@ -36,10 +37,13 @@ line; or through an interactive instant-search of your music library.
 muss searches for matches in the mpd database of file names and 
 playlist names. Then it automatically starts playing the songs. It
 can play internet radio streams when they are included in a playlist.
+It can play last.fm stations based on artist names.
 
 There are no configuration settings for muss beyond what is already 
 set up with mpc and mpd. To install, simply copy the muss executable 
-file into your search path (eg /usr/local/bin/).
+file into your search path (eg /usr/local/bin/). Note that to use
+last.fm, you will need to set up your username and password in the
+mpd configuration file (eg /etc/mpd/mpd.conf).
 
 Quicksearch mode examples:
     muss rolling stones
@@ -47,6 +51,9 @@ Quicksearch mode examples:
     muss guns roses not heaven
     muss playlist summer 2004
     muss publicradio
+
+Last.fm mode:
+    muss -f elvis presley
 
 Interactive mode:
     muss
