@@ -108,3 +108,9 @@ option_check -l && $MPC playlist
 option_check -u && $MPC update > /dev/null
 option_check -c && $MPC clear > /dev/null
 
+# show the user what's playing after we complete request, unless cleared
+if !(option_check -c)
+then
+  $MPC
+fi
+
